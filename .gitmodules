@@ -1,0 +1,3 @@
+[submodule "config_files"]
+	path = config_files
+	url = https://neufr-gitlab.neu.edu/neufr/vins/config_files.git
