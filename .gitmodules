@@ -1,3 +1,6 @@
 [submodule "config_files"]
 	path = config_files
 	url = https://neufr-gitlab.neu.edu/neufr/vins/config_files.git
+[submodule "AV-Matlab-SW"]
+	path = AV-Matlab-SW
+	url = https://github.com/jaffarrell/AV-Matlab-SW.git
