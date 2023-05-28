@@ -10,8 +10,11 @@ function params = extract_IMU_params(IMU_params)
     params.SigmaPink.gyro = IMU_params.Gyroscope.BiasInstability;
     params.SigmaPink.acc  = IMU_params.Accelerometer.BiasInstability;
     
-    params.tau.gyro = IMU_params.Gyroscope.tau;
-    params.tau.acc  = IMU_params.Accelerometer.tau;
+    params.tau1.gyro = IMU_params.Gyroscope.tau1;
+    params.tau2.gyro = IMU_params.Gyroscope.tau2;
+    
+    params.tau1.acc  = IMU_params.Accelerometer.tau1;
+    params.tau2.acc  = IMU_params.Accelerometer.tau2;
     
     params.b_on.gyro = IMU_params.Gyroscope.b_on;
     params.b_on.acc = IMU_params.Accelerometer.b_on;
