@@ -14,8 +14,11 @@ del_t = 1/sampling_rate;
 n = randn(M, 1); % driven noise
 b_0 = 0;
 
+% Distribute power of pink noise by dividing sqrt(del_t)
+sigma_max_discrete = sigma_max/sqrt(del_t);
+
 T = tau/1.89;
-Q = sigma_max/(0.437*sqrt(T));
+Q = sigma_max_discrete/(0.437*sqrt(T));
 
 % preallocate
 x = zeros(M, 1);
@@ -32,7 +35,7 @@ for i = 1:M
         x(i) = x(i-1) - del_t/T*x(i-1) + del_t*Q*n(i);
     end
 end
-x = x/sqrt(del_t);
+
 
 % Definition of first order gauss markov process in terms
 % autocorrelation function.
