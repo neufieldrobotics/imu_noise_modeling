@@ -4,10 +4,6 @@ function [accel,gyro,nw,b] = corrupt_with_sensor_noise(ideal_acc,ideal_gyro,...
                                                         sim_params)
 %corrupt_with_sensor_noise - corrupts the ideal measurements with different 
 %noise sources
-%Optional file header info (to give more details about the function than in the H1 line)
-%Optional file header info (to give more details about the function than in the H1 line)
-%Optional file header info (to give more details about the function than in the H1 line)
-%
 % Syntax:  [accel,gyro,nw,b] = corrupt_with_sensor_noise(ideal_acc,ideal_gyro,...
 %                                                    w_R_i_ideal,...
 %                                                    imu_params,...
@@ -32,21 +28,10 @@ function [accel,gyro,nw,b] = corrupt_with_sensor_noise(ideal_acc,ideal_gyro,...
 %    b    - bias signal due to brown+pink noise in ideal measurements.
 %           struct : b.acc and b.gyro. Each entry stores a 
 %           [3x1] column vector for x,y and z directions.
-% Example: 
-%    Line 1 of example
-%    Line 2 of example
-%    Line 3 of example
 %
-% Other m-files required: none
-% Subfunctions: none
-% MAT-files required: none
-%
-% See also: OTHER_FUNCTION_NAME1,  OTHER_FUNCTION_NAME2
 % Author: Jagatpreet Nir
 % Work address: Northeastern Field Robotics Lab
 % email: nir.j@northeastern.edu
-% Website: http://www.
-% Sept 2020; Last revision: 03-Nov-2020 
 
     global g_world;
     [M,N] = size(ideal_acc);
