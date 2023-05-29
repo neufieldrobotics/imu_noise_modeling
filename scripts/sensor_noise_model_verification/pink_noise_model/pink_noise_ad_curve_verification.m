@@ -119,3 +119,37 @@ hold on
 loglog(tau_actual, sqrt(avar_actual), '-b')   
 ylim([10e-7 10e-1])
 legend("theoretical", "original", "tau1 shifted", "tau range extended", "double sigma max")
+
+% Verify pink noise generator function. 
+figure(2)
+[AD_curve.theoretical.adev,...
+    AD_curve.theoretical.tau] = compute_theoretical_AD_curve_1(imu_params);
+loglog(AD_curve.theoretical.tau, AD_curve.theoretical.adev, '--b')
+imu_params.Accelerometer.tau1 = 20;
+imu_params.Accelerometer.tau2 = 60;
+pink_noise = pink_noise_generator(ad_lowest,...
+                                  imu_params.Accelerometer.tau1,...
+                                  imu_params.Accelerometer.tau2,...
+                                  num_samples,...
+                                  1/sampling_rate);
+                                  
+x1 = simulate_AR1_process(num_samples,...
+                         sampling_rate,...
+                         ad_lowest,...
+                         imu_params.Accelerometer.tau1);
+
+
+x2 = simulate_AR1_process(num_samples,...
+                         sampling_rate,...
+                         ad_lowest,...
+                         imu_params.Accelerometer.tau2);
+                     
+[avar_actual, tau_actual] = allanvar(x1 + x2, 'octave', sampling_rate);
+hold on
+loglog(tau_actual, sqrt(avar_actual), '--b')  
+hold on;
+[avar_actual, tau_actual] = allanvar(pink_noise, 'octave', sampling_rate);
+hold on
+loglog(tau_actual, sqrt(avar_actual), '--k')
+ylim([10e-7 10e-1])
+legend("sum of ar1", "pink-noise-generator", "theoretical")
