@@ -19,10 +19,10 @@ store different IMUs' noise values.
 # Todo:
 - [✓] configure the simulation for pink noise senstivity analysis and check the
    parameters being set are right.
-- [] Delete tau in the configuration files of pink simulation as well as from
+- [✓] Delete tau in the configuration files of pink simulation as well as from
    the code.
-- [] setup new functions in the code for running pink noise simulations.
-- [] run the senstivity analysis - simulation in parallel in hulk or crunch.
+- [✓] setup new functions in the code for running pink noise simulations.
+- [✓] run the senstivity analysis - simulation in parallel in hulk or crunch.
 - [] setup simulation configs for each sensor by removing the folder name in the
     config files and editing the mc_sim_config.
     Remove arbitrary functions.
@@ -30,6 +30,7 @@ store different IMUs' noise values.
    curves.
 - [] Run simulations for different sensors and record their results.
 - [] Improve visualization scripts for plotting all sensors together.
+
 # Resources
 1. [Github repository with important modeling hints](https://github.com/EVictorson/allan_variance)
 2. [IEEE standard on fiber optic gyros - v2](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=494457)
