@@ -48,83 +48,65 @@ function [accel,gyro,nw,b] = corrupt_with_sensor_noise(ideal_acc,ideal_gyro,...
 % Website: http://www.
 % Sept 2020; Last revision: 03-Nov-2020 
 
-global g_world;
-[M,N] = size(ideal_acc);
-del_t = 1/sim_params.SamplingRate;
+    global g_world;
+    [M,N] = size(ideal_acc);
+    del_t = 1/sim_params.SamplingRate;
 
-% White noise : Strength of noise due to sampling is
-% noise_density/sqrt(sampling_time)
-nw.acc = imu_params.Accelerometer.NoiseDensity.*randn(M,3)/sqrt(del_t); % Mx3
-nw.gyro = imu_params.Gyroscope.NoiseDensity.*randn(M,3)/sqrt(del_t); % Mx3
+    % White noise : Strength of noise due to sampling is
+    % noise_density/sqrt(sampling_time)
+    nw.acc = imu_params.Accelerometer.NoiseDensity.*randn(M,3)/sqrt(del_t); % Mx3
+    nw.gyro = imu_params.Gyroscope.NoiseDensity.*randn(M,3)/sqrt(del_t); % Mx3
 
-% Random Walk:  Strength of noise due to sampling is
-% noise_density/sqrt(sampling_time)
-nb.acc = imu_params.Accelerometer.RandomWalk.*randn(M,3)/sqrt(del_t); % Mx3
-nb.gyro = imu_params.Gyroscope.RandomWalk.*randn(M,3)/sqrt(del_t); % Mx3
+    % Random Walk:  Strength of noise due to sampling is
+    % noise_density/sqrt(sampling_time)
+    nb.acc = imu_params.Accelerometer.RandomWalk.*randn(M,3)/sqrt(del_t); % Mx3
+    nb.gyro = imu_params.Gyroscope.RandomWalk.*randn(M,3)/sqrt(del_t); % Mx3
 
-% Bias instability: Strength of noise due to sampling is
-% noise_density/sqrt(sampling_time)
-if(imu_params.Accelerometer.BiasInstability == 0)
-    np.acc = zeros(M,3);
-else
-    for i = 1:3                  
-        np.acc(:,i) = pink_noise_generator(imu_params.Accelerometer.sigma(i),...
-                                     imu_params.Accelerometer.tau1(i),...
-                                     imu_params.Accelerometer.tau2(i),...
-                                     M,del_t);
-    end
-end
-
-if(imu_params.Gyroscope.BiasInstability == 0)
-    np.gyro = zeros(M,3);
-else
-    for i = 1:3                                
-        np.gyro(:,i) = pink_noise_generator(imu_params.Gyroscope.sigma(i),...
-                             imu_params.Gyroscope.tau1(i),...
-                             imu_params.Gyroscope.tau2(i),...
-                             M,del_t);
-    end
-end
-
-% time constants
-tau.acc = imu_params.Accelerometer.tau; % 1x3
-tau.gyro = imu_params.Gyroscope.tau; % 1x3
-
-% delta decay
-% If the value of tau is zero, then we assume there is no pink/flicker
-% noise in the model.
-% if tau.acc == 0
-%     phi.acc = 0;
-% else
-%     phi.acc = 1./tau.acc; % 1x3
-% end
-% 
-% if tau.gyro == 0
-%     phi.gyro = 0;
-% else
-%     phi.gyro = 1/tau.gyro; % 1x3
-% end
-
-% Initial bias
-b_0.acc = imu_params.Accelerometer.b_on;
-b_0.gyro = imu_params.Gyroscope.b_on;
-
-% Preallocate
-b.acc = zeros(M,3);
-b.gyro = zeros(M,3);
-
-% Bias model with brown noise
-for i = 1:M
-    if i == 1
-        b.acc(i,:) = b_0.acc;
-        b.gyro(i,:) = b_0.gyro;
+    % Bias instability: Strength of noise due to sampling is
+    % noise_density/sqrt(sampling_time)
+    if(imu_params.Accelerometer.BiasInstability == 0)
+        np.acc = zeros(M,3);
     else
-        b.acc(i,:) = b.acc(i-1,:) + del_t*(nb.acc(i,:));
-        b.gyro(i,:) = b.gyro(i-1,:) + del_t*(nb.gyro(i,:));
+        for i = 1:3                  
+            np.acc(:,i) = pink_noise_generator(imu_params.Accelerometer.sigma(i),...
+                                         imu_params.Accelerometer.tau1(i),...
+                                         imu_params.Accelerometer.tau2(i),...
+                                         M,del_t);
+        end
     end
+
+    if(imu_params.Gyroscope.BiasInstability == 0)
+        np.gyro = zeros(M,3);
+    else
+        for i = 1:3                                
+            np.gyro(:,i) = pink_noise_generator(imu_params.Gyroscope.sigma(i),...
+                                 imu_params.Gyroscope.tau1(i),...
+                                 imu_params.Gyroscope.tau2(i),...
+                                 M,del_t);
+        end
+    end
+
+    % Initial bias
+    b_0.acc = imu_params.Accelerometer.b_on;
+    b_0.gyro = imu_params.Gyroscope.b_on;
+
+    % Preallocate
+    b.acc = zeros(M,3);
+    b.gyro = zeros(M,3);
+
+    % Bias model with brown noise
+    for i = 1:M
+        if i == 1
+            b.acc(i,:) = b_0.acc;
+            b.gyro(i,:) = b_0.gyro;
+        else
+            b.acc(i,:) = b.acc(i-1,:) + del_t*(nb.acc(i,:));
+            b.gyro(i,:) = b.gyro(i-1,:) + del_t*(nb.gyro(i,:));
+        end
+    end
+
+    %% IMU Model
+    gyro = ideal_gyro + b.gyro + nw.gyro + np.gyro;
+    accel = ideal_acc + b.acc + nw.acc + np.acc + (w_R_i_ideal*g_world)';
 end
 
-%% IMU Model
-gyro = ideal_gyro + b.gyro + nw.gyro + np.gyro;
-accel = ideal_acc + b.acc + nw.acc + np.acc + (w_R_i_ideal*g_world)';
-end
