@@ -52,7 +52,7 @@ pause(2);
 montecarlo_simulations(mc_sim_params,...
                        "accelerometer",...
                        mc_sim_params.filepath.save_path.acc{1})
-% tau shifted
+%% tau shifted
 montecarlo_simulations(mc_sim_params_tau_shifted,...
                        "accelerometer",...
                        mc_sim_params_tau_shifted.filepath.save_path.acc{2})
@@ -81,6 +81,9 @@ function montecarlo_simulations(mc_sim_params, comment_attribute, save_path)
         else 
             error("Invalid selection of file parameters")
         end
+    catch 
+        disp("Invalid selection of file parameters. Index parameter is wrong")
+    end
     
         for run=1:mc_sim_params.total_runs
             disp(' Gyroscope Run number = ');
@@ -100,7 +103,4 @@ function montecarlo_simulations(mc_sim_params, comment_attribute, save_path)
                         '.mat'),...
                         'mc_sim_run_data');
         end
-    catch
-        disp("Invalid selection of file parameters. Index parameter is wrong")
-    end
 end
