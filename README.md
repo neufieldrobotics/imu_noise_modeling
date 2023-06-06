@@ -3,20 +3,20 @@ This repository models different stochastic noise sources in an IMU - namely whi
 brown noise and pink noise. It implements montecarlo simulations to understand
 the position errors generated from each of these noise sources for the IMU parameters
 obtained from AD curves (stationary data collected greater than 5hrs).
-The position error is computed by dead-reckoning using rk method. 
+The position error is computed by dead-reckoning using rk method.
 
-The repository also has verification scripts to confirm the errors of the model 
+The repository also has verification scripts to confirm the errors of the model
 and check the accuracy in modeling of each noise source.
 
 **Note**: In future we will also add bulk model parameters and their effect on
-the overall error growth when an IMU is used. 
+the overall error growth when an IMU is used.
 
 Important submodules:
 1. config_files (local gitlab instance): Different branches of the config files
 store different IMUs' noise values.
-2. some public github projects: which have done similar work. 
+2. some public github projects: which have done similar work.
 
-# Todo:
+# Todo log:
 - [✓] configure the simulation for pink noise senstivity analysis and check the
    parameters being set are right.
 - [✓] Delete tau in the configuration files of pink simulation as well as from
@@ -25,6 +25,20 @@ store different IMUs' noise values.
 - [✓] run the senstivity analysis - simulation in parallel in hulk or crunch.
 - [] setup simulation configs for each sensor by removing the folder name in the
     config files and editing the mc_sim_config.
+    - [✓] - vn100 -
+    - [✓] - voxl
+    - [✓] - xsense
+    - [] - TUM - BMI160
+    - [] - EUROC - ADIS16448
+- [] Simulations:
+    - [] - vn100 → w- , b- , p- , wbp- , wb-
+    - [] - icp42688p → w - ✗  , b - ✗, p - ✗ , wbp_ag - ✗ , wb_ag - ✗
+    - [] - xsens → w - , b - , p - ✗ , wbp_ag - , wb_ag -
+    - [] - TUM → w- , b- , p- , wbp- , wb-
+    - [] - integration of stationary data vs simulated model - replication of
+        the behavior for TUM dataset.
+    - [] - comparison of wb and wbp of xsens and vn100 imu.
+    - [] - experimental dead-reckoning - error compilation from all flights.
     Remove arbitrary functions.
 - [] edit the config files for different sensors and check the values with AD
    curves.
