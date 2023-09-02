@@ -124,7 +124,7 @@ legend("theoretical", "original", "tau1 shifted", "tau range extended", "double 
 figure(2)
 [AD_curve.theoretical.adev,...
     AD_curve.theoretical.tau] = compute_theoretical_AD_curve_1(imu_params);
-loglog(AD_curve.theoretical.tau, AD_curve.theoretical.adev, '--b')
+loglog(AD_curve.theoretical.tau, AD_curve.theoretical.adev, '--m')
 imu_params.Accelerometer.tau1 = 20;
 imu_params.Accelerometer.tau2 = 60;
 pink_noise = pink_noise_generator(ad_lowest,...
@@ -145,11 +145,18 @@ x2 = simulate_AR1_process(num_samples,...
                          imu_params.Accelerometer.tau2);
                      
 [avar_actual, tau_actual] = allanvar(x1 + x2, 'octave', sampling_rate);
+[avar_x1, tau_actual] = allanvar(x1 , 'octave', sampling_rate);
+[avar_x2, tau_actual] = allanvar(x2, 'octave', sampling_rate);
+
+hold on;
+loglog(tau_actual, sqrt((sqrt(avar_x1) > 1e-4).*avar_x1), 'b');
+hold on;
+loglog(tau_actual, sqrt((sqrt(avar_x2) > 1e-4).*avar_x2), 'g');
 hold on
-loglog(tau_actual, sqrt(avar_actual), '--b')  
+loglog(tau_actual, sqrt((sqrt(avar_x2) > 1e-4).*avar_x2 + (sqrt(avar_x1) > 1e-4).*avar_x1), 'r');
 hold on;
 [avar_actual, tau_actual] = allanvar(pink_noise, 'octave', sampling_rate);
 hold on
 loglog(tau_actual, sqrt(avar_actual), '--k')
 ylim([10e-7 10e-1])
-legend("sum of ar1", "pink-noise-generator", "theoretical")
+legend("theoretical", "sum of ar1", "pink-noise-generator")

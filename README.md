@@ -31,9 +31,9 @@ store different IMUs' noise values.
     - [] - TUM - BMI160
     - [] - EUROC - ADIS16448
 - [] Simulations:
-    - [] - vn100 → w- , b- , p- , wbp- , wb-
+    - [] - vn100 → w - , b- , p- , wbp- , wb-
     - [] - icp42688p → w - ✗  , b - ✗, p - ✗ , wbp_ag - ✗ , wb_ag - ✗
-    - [] - xsens → w - , b - , p - ✗ , wbp_ag - , wb_ag -
+    - [] - xsens → w - , b - , p - ✗ , wbp_ag - ✗ , wb_ag -
     - [] - TUM → w- , b- , p- , wbp- , wb-
     - [] - integration of stationary data vs simulated model - replication of
         the behavior for TUM dataset.
