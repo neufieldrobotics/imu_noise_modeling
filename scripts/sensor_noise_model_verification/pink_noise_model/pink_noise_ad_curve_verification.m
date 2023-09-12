@@ -37,7 +37,7 @@ grid minor
 
 % case1: original
 imu_params.Accelerometer.tau1 = 20;
-imu_params.Accelerometer.tau2 = 60;
+imu_params.Accelerometer.tau2 = 100;
 imu_params.Accelerometer.sigma = ad_lowest;
 
 duration = 5; % hours
@@ -126,7 +126,7 @@ figure(2)
     AD_curve.theoretical.tau] = compute_theoretical_AD_curve_1(imu_params);
 loglog(AD_curve.theoretical.tau, AD_curve.theoretical.adev, '--m')
 imu_params.Accelerometer.tau1 = 20;
-imu_params.Accelerometer.tau2 = 60;
+imu_params.Accelerometer.tau2 = 100;
 pink_noise = pink_noise_generator(ad_lowest,...
                                   imu_params.Accelerometer.tau1,...
                                   imu_params.Accelerometer.tau2,...
@@ -160,3 +160,22 @@ hold on
 loglog(tau_actual, sqrt(avar_actual), '--k')
 ylim([10e-7 10e-1])
 legend("theoretical", "sum of ar1", "pink-noise-generator")
+
+figure()
+loglog(tau_actual, sqrt((sqrt(avar_x1) > 1e-4).*avar_x1), 'b-','LineWidth',5);
+hold on;
+loglog(tau_actual, sqrt((sqrt(avar_x2) > 1e-4).*avar_x2), 'g-','LineWidth',5);
+hold on
+loglog(tau_actual, sqrt((sqrt(avar_x2) > 1e-4).*avar_x2 + (sqrt(avar_x1) > 1e-4).*avar_x1), 'r-','LineWidth',5);
+xlabel("Cluster time $\tau$ (s)", 'Interpreter','latex','FontSize',14)
+ylabel("$\sigma$", 'Interpreter','latex','FontSize',14)
+grid on
+grid minor
+legend("$\mathbf{x_1}$: $\tau1=10$, $\sigma_{peak}=3.18e-4$",...
+           '$\mathbf{x_2}$: $\tau2=163$, $\sigma_{peak}=3.18e-4$',...
+           '$\mathbf{x_1}+\mathbf{x_2}$',...
+           'Interpreter','latex');
+title("Allan deviation")
+ylim([10e-7 10e-1])
+ax = gca;
+ax.FontSize = 16;
