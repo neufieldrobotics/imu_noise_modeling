@@ -29,11 +29,11 @@ title("AR(1) process in time domain")
 
 % get allan deviation and plot it.
 
-h = figure()
+h = figure();
 [avar_actual, tau_actual] = allanvar(x, 'octave', sampling_rate);
-loglog(tau_actual, sqrt(avar_actual), '--b')
-xlabel('Averaging Time (\tau)')
-ylabel("\sigma")
+loglog(tau_actual, sqrt(avar_actual), '--b');
+xlabel('Averaging Time ($\tau$)', 'Interpreter','latex','FontSize',14);
+ylabel("$\sigma$",'Interpreter','latex','FontSize',14);
 grid on 
 grid minor
 
@@ -76,12 +76,14 @@ hold on
 loglog(tau, sqrt(sigma_var))
 ytickformat('%g M')
 hold on
-loglog(calculated_tau, allan_sigma_max, "*r", 'MarkerSize', 16)
-loglog(tau(1:i), allan_sigma_max*ones(i),'--r');
-text(calculated_tau, allan_sigma_max, num2str(allan_sigma_max));
-xlabel("\tau / T_c")
-ylabel("\sigma")
+loglog(calculated_tau, allan_sigma_max, "*r", 'MarkerSize', 10)
+loglog(tau(1:i), allan_sigma_max*ones(i),'--r','LineWidth', 4);
+text(calculated_tau, allan_sigma_max, num2str(allan_sigma_max),'FontSize',16);
+xlabel("$\tau / T_c$",'Interpreter','latex','FontSize',16)
+ylabel("$\sigma$",'Interpreter','latex','FontSize',16)
 ylim([.01, 100])
 grid on
-legend("first order approximation", "power spectral density")
+ax = gca;
+ax.FontSize = 16;
+legend("first order approximation", "power spectral density",'Interpreter','latex','FontSize',16)
 saveas(h, fullfile("./plot_images/", 'ar1_process.png'));
