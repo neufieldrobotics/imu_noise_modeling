@@ -94,39 +94,74 @@ classdef Visualizer
             grid minor
         end
                
-        function [h1,h2,h3] = stacked_plot(t,data,linespec)
+        function [h1,h2,h3] = stacked_plot(t,data,linespec,use_noise_colors)
             [M,N] = size(data);
             h1 = subplot(3,1,1); 
             plot(t,data(:,1),linespec{1},'MarkerSize',2,'LineWidth',3);
-            colororder([0.6350,0.0780,0.1840;...
-                        1,0,1;...
-                        0,0.4470,0.7410])
+            if use_noise_colors==1
+                colororder([0.6350,0.0780,0.1840;...
+                            1,0,1;...
+                            0,0.4470,0.7410])
+            else
+                colororder([0.83 0.14 0.14;...
+                            1.00 0.54 0.00;...
+                            0.47 0.25 0.80;...
+                            0.25 0.80 0.54]);
+            end
+            
             hold on;
             
             h2 = subplot(3,1,2);
             plot(t,data(:,2),linespec{2},'MarkerSize',2,'LineWidth',3);
-            colororder([0.6350,0.0780,0.1840;...
-                        1,0,1;...
-                        0,0.4470,0.7410]);
+            if use_noise_colors==1
+                colororder([0.6350,0.0780,0.1840;...
+                            1,0,1;...
+                            0,0.4470,0.7410])
+            else
+                colororder([0.83 0.14 0.14;...
+                            1.00 0.54 0.00;...
+                            0.47 0.25 0.80;...
+                            0.25 0.80 0.54]);
+            end
+            
             hold on;
             
             h3 = subplot(3,1,3);
             plot(t,data(:,3),linespec{3},'MarkerSize',2,'LineWidth',3);
-            colororder([0.6350,0.0780,0.1840;...
-                        1,0,1;...
-                        0,0.4470,0.7410])
+            if use_noise_colors==1
+                colororder([0.6350,0.0780,0.1840;...
+                            1,0,1;...
+                            0,0.4470,0.7410])
+            else
+                colororder([0.83 0.14 0.14;...
+                            1.00 0.54 0.00;...
+                            0.47 0.25 0.80;...
+                            0.25 0.80 0.54]);
+            end
+            
             hold on;
+            
         end
         
-        function format_plot(h,plt_fmt)
-            xlabel(h,plt_fmt.label.x);
-            ylabel(h,plt_fmt.label.y);
-            title(h,plt_fmt.title,'Interpreter','none');
-            xlim auto;
-            ylim auto;
+        function format_plot(h,plt_fmt,y_limits)
+            xlabel(h,plt_fmt.label.x,'FontSize',14);
+            ylabel(h,plt_fmt.label.y,'FontSize',14);
+            if ~isempty(plt_fmt.title)
+                title(h,plt_fmt.title,'Interpreter','latex');
+            end
+            h.FontSize = 14;
+            if ~ isempty(y_limits)
+                ylim(h, y_limits);
+            else
+                axis auto
+            end
             if (isfield(plt_fmt,'fields'))
-                l = legend(h,plt_fmt.fields,'Location','Northwest','Box','off'); 
-                set(l,'Interpreter','none');
+                if ~isempty(plt_fmt.('fields'))
+                    l = legend(h,plt_fmt.fields,'Location',...
+                              'bestoutside','Box',...
+                              'off','FontSize',14);
+                     set(l,'Interpreter','latex');
+                end
             end
             grid(h,'on');
             grid(h,'minor');
