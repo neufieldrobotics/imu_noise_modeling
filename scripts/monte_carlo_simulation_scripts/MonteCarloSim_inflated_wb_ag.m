@@ -1,3 +1,7 @@
+% Simulation for inflated white noise in accelerometer 
+% and experimental noise parameters for gyroscope - white and brown are
+% used. Gyroscope parameters are not inflated. 
+
 clear
 global total_runs
 script_paths;
